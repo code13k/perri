@@ -7,7 +7,7 @@ import org.code13k.perri.config.ChannelConfig;
 import org.code13k.perri.app.Env;
 import org.code13k.perri.app.Status;
 import org.code13k.perri.service.api.ApiHttpServer;
-import org.code13k.perri.service.main.MainServer;
+import org.code13k.perri.service.main.MainHttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class Main {
         }
 
         // Run
-        Vertx.vertx().deployVerticle(MainServer.class.getName());
+        Vertx.vertx().deployVerticle(MainHttpServer.class.getName());
         Vertx.vertx().deployVerticle(ApiHttpServer.class.getName());
         mLogger.info("Running application is successful.");
     }

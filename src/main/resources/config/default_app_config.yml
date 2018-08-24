@@ -1,5 +1,4 @@
 port:
-  main: 59490
+  main_http: 59490
   api_http: 59491
-
 

@@ -54,8 +54,8 @@ public class AppConfig extends BasicConfig {
             LinkedHashMap portObject = (LinkedHashMap) yamlObject.get("port");
             mLogger.trace("portObject class name = " + portObject.getClass().getName());
             mLogger.trace("portObject = " + portObject);
-            Integer portMain = (Integer) portObject.get("main");
-            if (portMain == null) {
+            Integer portMainHttp = (Integer) portObject.get("main_http");
+            if (portMainHttp == null) {
                 mLogger.error("Invalid main port");
                 return false;
             }
@@ -64,11 +64,11 @@ public class AppConfig extends BasicConfig {
                 mLogger.error("Invalid api_http port");
                 return false;
             }
-            if (portMain == portApiHttp) {
-                mLogger.error("Duplicated port bind : main=" + portMain + ", api_http=" + portApiHttp);
+            if (portMainHttp == portApiHttp) {
+                mLogger.error("Duplicated port bind : main_http=" + portMainHttp + ", api_http=" + portApiHttp);
                 return false;
             }
-            mPortInfo.setMain(portMain);
+            mPortInfo.setMainHttp(portMainHttp);
             mPortInfo.setApiHttp(portApiHttp);
         } catch (Exception e) {
             mLogger.error("Failed to load config file", e);
@@ -88,7 +88,7 @@ public class AppConfig extends BasicConfig {
         mLogger.info("Config file path = " + getConfigFilename());
 
         // PortInfo
-        mLogger.info("PortInfo of main = " + mPortInfo.getMain());
+        mLogger.info("PortInfo of main_http = " + mPortInfo.getMainHttp());
         mLogger.info("PortInfo of api_http = " + mPortInfo.getApiHttp());
 
         // End

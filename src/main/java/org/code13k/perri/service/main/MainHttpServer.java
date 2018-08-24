@@ -23,12 +23,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
-public class MainServer extends AbstractVerticle {
+public class MainHttpServer extends AbstractVerticle {
     // Logger
-    private static final Logger mLogger = LoggerFactory.getLogger(MainServer.class);
+    private static final Logger mLogger = LoggerFactory.getLogger(MainHttpServer.class);
 
     // Port
-    public static final int PORT = AppConfig.getInstance().getPort().getMain();
+    public static final int PORT = AppConfig.getInstance().getPort().getMainHttp();
 
     /**
      * start()

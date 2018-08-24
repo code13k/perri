@@ -34,9 +34,7 @@ Logback, that is famous logging library, configuration file.
 
 ## Server
 Perri has two servers. 
-
 One is a main server that send message to messenger.
-
 The other is a restful API server that provide application information and additional functions.
 
 

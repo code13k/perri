@@ -3,16 +3,15 @@ package org.code13k.perri.model.config.app;
 import org.code13k.perri.model.BasicModel;
 
 public class PortInfo extends BasicModel {
-    private int main;
+    private int mainHttp;
     private int apiHttp;
-    private int apiWs;
 
-    public int getMain() {
-        return main;
+    public int getMainHttp() {
+        return mainHttp;
     }
 
-    public void setMain(int main) {
-        this.main = main;
+    public void setMainHttp(int mainHttp) {
+        this.mainHttp = mainHttp;
     }
 
     public int getApiHttp() {
@@ -21,13 +20,5 @@ public class PortInfo extends BasicModel {
 
     public void setApiHttp(int apiHttp) {
         this.apiHttp = apiHttp;
-    }
-
-    public int getApiWs() {
-        return apiWs;
-    }
-
-    public void setApiWs(int apiWs) {
-        this.apiWs = apiWs;
     }
 }
