@@ -55,8 +55,6 @@ public class MainHttpServer extends AbstractVerticle {
 
     /**
      * Set router
-     * <p>
-     * TODO check message length (400, Bad request : message is too long, tags is too long)
      */
     private void setRouter(Router router) {
         // GET,POST /:channel?message={메세지내용}&tags={메세지태그}
@@ -109,11 +107,34 @@ public class MainHttpServer extends AbstractVerticle {
                 });
             }
         });
-
     }
 
     /**
-     * sendMessage()
+     * Response HTTP 200 OK
+     */
+    private void responseHttpOK(RoutingContext routingContext) {
+        HttpServerResponse response = routingContext.response();
+        response.putHeader(HttpHeaders.CONTENT_TYPE, "text/plain");
+        response.setStatusCode(200);
+        response.setStatusMessage("OK");
+        response.end("OK");
+        response.close();
+    }
+
+    /**
+     * Response HTTP error status
+     */
+    private void responseHttpError(RoutingContext routingContext, int statusCode, String message) {
+        HttpServerResponse response = routingContext.response();
+        response.putHeader(HttpHeaders.CONTENT_TYPE, "text/plain");
+        response.setStatusCode(statusCode);
+        response.setStatusMessage(message);
+        response.end(message);
+        response.close();
+    }
+
+    /**
+     * Send message
      */
     private void sendMessage(RoutingContext routingContext, String channel, String message, String tags) {
         mLogger.debug("channel # " + channel);
@@ -122,15 +143,13 @@ public class MainHttpServer extends AbstractVerticle {
 
         // Exception (1)
         if (StringUtils.isEmpty(message)) {
-            String statusMessage = "Invalid message";
-            routingContext.response().setStatusCode(403).setStatusMessage(statusMessage).end(statusMessage);
+            responseHttpError(routingContext, 403, "Invalid message");
             return;
         }
 
         // Exception (2)
         if (ChannelConfig.getInstance().isAvailableKey(channel) == false) {
-            String statusMessage = "Invalid channel";
-            routingContext.response().setStatusCode(403).setStatusMessage(statusMessage).end(statusMessage);
+            responseHttpError(routingContext, 403, "Invalid channel");
             return;
         }
 
@@ -147,8 +166,7 @@ public class MainHttpServer extends AbstractVerticle {
             }
         } catch (Exception e) {
             mLogger.error("Failed to limit message", e);
-            String statusMessage = "Internal server error";
-            routingContext.response().setStatusCode(500).setStatusMessage(statusMessage).end(statusMessage);
+            responseHttpError(routingContext, 500, "Internal server error");
             return;
         }
 
@@ -170,8 +188,7 @@ public class MainHttpServer extends AbstractVerticle {
             }
         } catch (Exception e) {
             mLogger.error("Failed to limit tags", e);
-            String statusMessage = "Internal server error";
-            routingContext.response().setStatusCode(500).setStatusMessage(statusMessage).end(statusMessage);
+            responseHttpError(routingContext, 500, "Internal server error");
             return;
         }
         mLogger.trace("tagList = " + tagList);
@@ -182,8 +199,7 @@ public class MainHttpServer extends AbstractVerticle {
         messageObject.setText(message);
         messageObject.setTags(tagList);
         MessageManager.getInstance().send(messageObject);
-        String statusMessage = "OK";
-        routingContext.response().setStatusCode(200).setStatusMessage(statusMessage).end(statusMessage);
+        responseHttpOK(routingContext);
     }
 
     /**
