@@ -23,11 +23,11 @@ You can find it at config directory.
 
 Perri has three configuration files.
 
-#### app_config.yml
+### app_config.yml
 It's application configuration file.
-#### channel_config.yml
+### channel_config.yml
 It's channel configuration file.
-#### logback.xml
+### logback.xml
 Logback, that is famous logging library, configuration file.
 
 
