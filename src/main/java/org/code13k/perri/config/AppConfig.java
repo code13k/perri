@@ -34,7 +34,7 @@ public class AppConfig extends BasicConfig {
 
     @Override
     protected String getDefaultConfigFilename() {
-        return "default_app_config.yaml";
+        return "default_app_config.yml";
     }
 
     @Override

@@ -1,0 +1,29 @@
+perri_info:
+- type: "telegram"
+  bot_id: ""
+  chat_id: ""
+  display_tags: true
+  merge_duplicate_message: true
+- type: "slack"
+  webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
+- type: "webhook"
+  webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
+
+perri_error:
+- type: "telegram"
+  bot_id: ""
+  chat_id: ""
+  display_tags: true
+  merge_duplicate_message: true
+- type: "slack"
+  webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
+- type: "webhook"
+  webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
