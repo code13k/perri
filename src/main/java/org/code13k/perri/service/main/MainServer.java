@@ -134,25 +134,53 @@ public class MainServer extends AbstractVerticle {
             return;
         }
 
-        // Limit message byte (3K)
+        // Limit message byte (3K = 3072byte)
         try {
-            int threeKByte = 3072;
+            int maxByte = 3072;
             String urlEncodedMessage = URLEncoder.encode(message, "UTF-8");
             int urlEncodedMessageByte = urlEncodedMessage.getBytes().length;
-            if (urlEncodedMessageByte > threeKByte) {
-                int endIndex = urlEncodedMessageByte - (urlEncodedMessageByte-threeKByte) - 128;
+            if (urlEncodedMessageByte > maxByte) {
+                mLogger.info("Message is too long (maximum byte is " + maxByte + "byte)");
+                int endIndex = urlEncodedMessageByte - (urlEncodedMessageByte - maxByte) - 128;
                 message = new String(message.getBytes(), 0, endIndex);
                 message += " ...";
             }
         } catch (Exception e) {
             mLogger.error("Failed to limit message", e);
+            String statusMessage = "Internal server error";
+            routingContext.response().setStatusCode(500).setStatusMessage(statusMessage).end(statusMessage);
+            return;
         }
+
+        // Limit tags byte (512byte)
+        ArrayList<String> tagList = new ArrayList<>();
+        ArrayList<String> tempTagList = convertTagList(tags);
+        try {
+            int maxByte = 12;
+            int totalByte = 0;
+            int idx = 0;
+            for (idx = 0; idx < tempTagList.size(); idx++) {
+                String urlEncodedTag = tempTagList.get(idx);
+                totalByte += urlEncodedTag.getBytes().length;
+                if (totalByte > maxByte) {
+                    mLogger.info("Tags is too long (maximum byte is " + maxByte + "byte)");
+                    break;
+                }
+                tagList.add(tempTagList.get(idx));
+            }
+        } catch (Exception e) {
+            mLogger.error("Failed to limit tags", e);
+            String statusMessage = "Internal server error";
+            routingContext.response().setStatusCode(500).setStatusMessage(statusMessage).end(statusMessage);
+            return;
+        }
+        mLogger.trace("tagList = " + tagList);
 
         // Process
         Message messageObject = new Message();
         messageObject.setChannel(channel);
         messageObject.setText(message);
-        messageObject.setTags(convertTagList(tags));
+        messageObject.setTags(tagList);
         MessageManager.getInstance().send(messageObject);
         String statusMessage = "OK";
         routingContext.response().setStatusCode(200).setStatusMessage(statusMessage).end(statusMessage);
