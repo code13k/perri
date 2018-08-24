@@ -1,7 +1,6 @@
 package org.code13k.perri.config;
 
 import org.code13k.perri.model.config.app.PortInfo;
-import org.code13k.perri.model.config.app.WebhookInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -14,7 +13,6 @@ public class AppConfig extends BasicConfig {
 
     // Data
     private PortInfo mPortInfo = new PortInfo();
-    private WebhookInfo mWebhookInfo = new WebhookInfo();
 
     /**
      * Singleton
@@ -72,20 +70,6 @@ public class AppConfig extends BasicConfig {
             }
             mPortInfo.setMain(portMain);
             mPortInfo.setApiHttp(portApiHttp);
-
-            // Webhook for alarm
-            LinkedHashMap webhookObject = (LinkedHashMap) yamlObject.get("webhook");
-            if (webhookObject != null) {
-                mLogger.trace("webhookObject class name = " + portObject.getClass().getName());
-                LinkedHashMap webhookAlarmObject = (LinkedHashMap) webhookObject.get("alarm");
-                if (webhookAlarmObject != null) {
-                    mLogger.trace("webhookAlarmObject class name = " + portObject.getClass().getName());
-                    mLogger.debug("webhookAlarmObject = " + webhookAlarmObject);
-                    mWebhookInfo.setAlarmDebug((String) webhookAlarmObject.get("debug"));
-                    mWebhookInfo.setAlarmInfo((String) webhookAlarmObject.get("info"));
-                    mWebhookInfo.setAlarmError((String) webhookAlarmObject.get("error"));
-                }
-            }
         } catch (Exception e) {
             mLogger.error("Failed to load config file", e);
             return false;
@@ -107,11 +91,6 @@ public class AppConfig extends BasicConfig {
         mLogger.info("PortInfo of main = " + mPortInfo.getMain());
         mLogger.info("PortInfo of api_http = " + mPortInfo.getApiHttp());
 
-        // Webhook for log
-        mLogger.info("Webhook for alarm (debug) = " + mWebhookInfo.getAlarmDebug());
-        mLogger.info("Webhook for alarm (info) = " + mWebhookInfo.getAlarmInfo());
-        mLogger.info("Webhook for alarm (error) = " + mWebhookInfo.getAlarmError());
-
         // End
         mLogger.info("------------------------------------------------------------------------");
     }
@@ -121,12 +100,5 @@ public class AppConfig extends BasicConfig {
      */
     public PortInfo getPort() {
         return mPortInfo;
-    }
-
-    /**
-     * Get webhook for log
-     */
-    public WebhookInfo getWebhookLog() {
-        return mWebhookInfo;
     }
 }

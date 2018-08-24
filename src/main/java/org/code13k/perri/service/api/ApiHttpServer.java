@@ -15,7 +15,7 @@ public class ApiHttpServer extends AbstractVerticle {
     // Logger
     private static final Logger mLogger = LoggerFactory.getLogger(ApiHttpServer.class);
 
-    // PortInfo
+    // Port
     public static final int PORT = AppConfig.getInstance().getPort().getApiHttp();
 
     /**

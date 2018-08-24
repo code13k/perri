@@ -27,7 +27,7 @@ public class MainServer extends AbstractVerticle {
     // Logger
     private static final Logger mLogger = LoggerFactory.getLogger(MainServer.class);
 
-    // PortInfo
+    // Port
     public static final int PORT = AppConfig.getInstance().getPort().getMain();
 
     /**
