@@ -160,7 +160,7 @@ public class MainHttpServer extends AbstractVerticle {
             int urlEncodedMessageByte = urlEncodedMessage.getBytes().length;
             if (urlEncodedMessageByte > maxByte) {
                 mLogger.info("Message is too long (maximum byte is " + maxByte + "byte)");
-                int endIndex = urlEncodedMessageByte - (urlEncodedMessageByte - maxByte) - 128;
+                int endIndex = urlEncodedMessageByte - (urlEncodedMessageByte - maxByte);
                 message = new String(message.getBytes(), 0, endIndex);
                 message += " ...";
             }
@@ -174,7 +174,7 @@ public class MainHttpServer extends AbstractVerticle {
         ArrayList<String> tagList = new ArrayList<>();
         ArrayList<String> tempTagList = convertTagList(tags);
         try {
-            int maxByte = 12;
+            int maxByte = 512;
             int totalByte = 0;
             int idx = 0;
             for (idx = 0; idx < tempTagList.size(); idx++) {
