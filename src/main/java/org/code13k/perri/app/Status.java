@@ -1,5 +1,6 @@
 package org.code13k.perri.app;
 
+import org.code13k.perri.business.message.MessageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class Status {
      */
     public void init() {
         // Timer
-        Timer timer = new Timer("StatusLogging");
+        Timer timer = new Timer("perri-status-logging");
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -51,20 +52,20 @@ public class Status {
                     // Nothing
                 }
             }
-        }, 1000, 1000);
+        }, 5000, 1000);
     }
 
     /**
      * Logging
      */
     public void logging() {
-        /*
-        mLogger.trace("This is TRACE Log!");
-        mLogger.debug("This is DEBUG Log!");
-        mLogger.info("This is INFO Log!");
-        mLogger.warn("This is WARN Log!");
-        mLogger.error("This is ERROR Log!");
-        */
+        StringBuffer sb = new StringBuffer();
+
+        // Number of ready message
+        sb.append("Ready message = "+ MessageManager.getInstance().numberOfReadyMessage());
+
+        // End
+        mLogger.info(sb.toString());
     }
 
     /**
