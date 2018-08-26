@@ -64,7 +64,7 @@ public class MessageOperator {
      * Operate message operation
      */
     private void operate(MessageOperation messageOperation) {
-        if(messageOperation!=null) {
+        if (messageOperation != null) {
             final String type = messageOperation.getChannelInfo().getType();
             BasicSender sender = SenderFactory.getSender(messageOperation);
             sender.send(messageOperation, new Consumer<Integer>() {

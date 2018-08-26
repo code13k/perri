@@ -104,8 +104,4 @@ public class Status {
         int runningTimeHour = runningTimeMin / 60;
         return runningTimeHour;
     }
-
-
-
-
 }
