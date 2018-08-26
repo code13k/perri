@@ -16,6 +16,7 @@ public class Env {
     private String mIP = "";
     private int mProcessorCount = 0;
     private String mVersionString = "";
+    private String mJarFilename = "";
 
 
     /**
@@ -65,10 +66,20 @@ public class Env {
         // Version
         try {
             mVersionString = Util.getApplicationVersion();
-            String temp = StringUtils.replace(mVersionString, ".", "");
         } catch (Exception e) {
             mLogger.error("Failed to get version", e);
         }
+
+        // Jar File Name
+        String javaClassPath = System.getProperty("java.class.path");
+        String jarFilename = "";
+        if (StringUtils.isBlank(javaClassPath) == false) {
+            String[] temp = StringUtils.split(javaClassPath, "/");
+            if (temp.length > 0) {
+                jarFilename = temp[temp.length - 1];
+            }
+        }
+        mJarFilename = jarFilename;
 
         // End
         logging();
@@ -94,6 +105,9 @@ public class Env {
 
         // Version
         mLogger.info("Version = " + mVersionString);
+
+        // Jar File Name
+        mLogger.info("Jar filename = " + mJarFilename);
 
         // End
         mLogger.info("------------------------------------------------------------------------");
@@ -125,5 +139,12 @@ public class Env {
      */
     public int getProcessorCount() {
         return mProcessorCount;
+    }
+
+    /**
+     * Filename of Jar
+     */
+    public String getJarFilename(){
+        return mJarFilename;
     }
 }
