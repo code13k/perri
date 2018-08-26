@@ -30,8 +30,6 @@ public class MainHttpServer extends AbstractVerticle {
     // Const
     public static final int PORT = AppConfig.getInstance().getPort().getMainHttp();
 
-    // Data
-    private HttpServerOptions mHttpServerOptions = new HttpServerOptions();
 
     /**
      * start()
@@ -41,11 +39,12 @@ public class MainHttpServer extends AbstractVerticle {
         super.start();
         mLogger.trace("start()");
 
-        // Init HTTP APIHttpServer
-        mHttpServerOptions.setCompressionSupported(true);
-        mHttpServerOptions.setPort(PORT);
-        mHttpServerOptions.setIdleTimeout(5); // seconds
-        HttpServer httpServer = vertx.createHttpServer(mHttpServerOptions);
+        // Init
+        HttpServerOptions httpServerOptions = new HttpServerOptions();
+        httpServerOptions.setCompressionSupported(true);
+        httpServerOptions.setPort(PORT);
+        httpServerOptions.setIdleTimeout(5); // seconds
+        HttpServer httpServer = vertx.createHttpServer(httpServerOptions);
 
         // Routing
         Router router = Router.router(vertx);
@@ -55,23 +54,28 @@ public class MainHttpServer extends AbstractVerticle {
         httpServer.requestHandler(router::accept).listen();
 
         // End
-        logging();
+        logging(httpServerOptions, router);
     }
 
     /**
      * Logging
      */
-    private void logging() {
+    private void logging(HttpServerOptions httpServerOptions, Router router) {
         // Begin
         mLogger.info("------------------------------------------------------------------------");
-        mLogger.info("Main Http Server");
+        mLogger.info("Main HTTP Server");
         mLogger.info("------------------------------------------------------------------------");
 
         // Http Server Options
-        mLogger.info("Port = " + mHttpServerOptions.getPort());
-        mLogger.info("Idle timeout (second) = " + mHttpServerOptions.getIdleTimeout());
-        mLogger.info("Compression supported = " + mHttpServerOptions.isCompressionSupported());
-        mLogger.info("Compression level = " + mHttpServerOptions.getCompressionLevel());
+        mLogger.info("Port = " + httpServerOptions.getPort());
+        mLogger.info("Idle timeout (second) = " + httpServerOptions.getIdleTimeout());
+        mLogger.info("Compression supported = " + httpServerOptions.isCompressionSupported());
+        mLogger.info("Compression level = " + httpServerOptions.getCompressionLevel());
+
+        // Route
+        router.getRoutes().forEach(r -> {
+            mLogger.info("Routing path = " + r.getPath());
+        });
 
         // End
         mLogger.info("------------------------------------------------------------------------");
@@ -82,53 +86,54 @@ public class MainHttpServer extends AbstractVerticle {
      */
     private void setRouter(Router router) {
         // GET,POST /:channel?message={메세지내용}&tags={메세지태그}
-        router.route().method(HttpMethod.GET).path("/:channel").handler(routingContext -> {
+        router.route().path("/:channel").handler(routingContext -> {
             mLogger.debug("Request host : " + routingContext.request().localAddress().host());
-            routingContext.request().endHandler(new Handler<Void>() {
-                @Override
-                public void handle(Void event) {
-                    String channel = routingContext.request().getParam("channel");
-                    String message = routingContext.request().getParam("message");
-                    String tags = routingContext.request().getParam("tags");
-                    sendMessage(routingContext, channel, message, tags);
-                }
-            });
-        });
-        router.route().method(HttpMethod.POST).path("/:channel").handler(routingContext -> {
-            final String headerContentType = routingContext.request().getHeader(HttpHeaderNames.CONTENT_TYPE);
-
-            // application/json
-            if (HttpHeaderValues.APPLICATION_JSON.contentEqualsIgnoreCase(headerContentType)) {
-                routingContext.request().bodyHandler(new Handler<Buffer>() {
-                    @Override
-                    public void handle(Buffer event) {
-                        String body = event.toString();
-                        mLogger.trace("body = " + body);
-
-                        // Process
-                        Gson gson = new Gson();
-                        JsonObject jsonObject = gson.fromJson(body, JsonObject.class);
-                        String channel = routingContext.request().getParam("channel");
-                        String message = jsonObject.get("message").getAsString();
-                        String tags = jsonObject.get("tags").getAsString();
-                        sendMessage(routingContext, channel, message, tags);
-                    }
-                });
-            }
-
-            // multipart/form-data
-            else {
-                routingContext.request().setExpectMultipart(true);
+            if (HttpMethod.GET == routingContext.request().method()) {
                 routingContext.request().endHandler(new Handler<Void>() {
                     @Override
                     public void handle(Void event) {
                         String channel = routingContext.request().getParam("channel");
-                        MultiMap form = routingContext.request().formAttributes();
-                        String message = form.get("message");
-                        String tags = form.get("tags");
+                        String message = routingContext.request().getParam("message");
+                        String tags = routingContext.request().getParam("tags");
                         sendMessage(routingContext, channel, message, tags);
                     }
                 });
+            } else if (HttpMethod.POST == routingContext.request().method()) {
+                final String headerContentType = routingContext.request().getHeader(HttpHeaderNames.CONTENT_TYPE);
+
+                // application/json
+                if (HttpHeaderValues.APPLICATION_JSON.contentEqualsIgnoreCase(headerContentType)) {
+                    routingContext.request().bodyHandler(new Handler<Buffer>() {
+                        @Override
+                        public void handle(Buffer event) {
+                            String body = event.toString();
+                            mLogger.trace("body = " + body);
+
+                            // Process
+                            Gson gson = new Gson();
+                            JsonObject jsonObject = gson.fromJson(body, JsonObject.class);
+                            String channel = routingContext.request().getParam("channel");
+                            String message = jsonObject.get("message").getAsString();
+                            String tags = jsonObject.get("tags").getAsString();
+                            sendMessage(routingContext, channel, message, tags);
+                        }
+                    });
+                }
+
+                // multipart/form-data
+                else {
+                    routingContext.request().setExpectMultipart(true);
+                    routingContext.request().endHandler(new Handler<Void>() {
+                        @Override
+                        public void handle(Void event) {
+                            String channel = routingContext.request().getParam("channel");
+                            MultiMap form = routingContext.request().formAttributes();
+                            String message = form.get("message");
+                            String tags = form.get("tags");
+                            sendMessage(routingContext, channel, message, tags);
+                        }
+                    });
+                }
             }
         });
     }
@@ -230,19 +235,18 @@ public class MainHttpServer extends AbstractVerticle {
      * convert comma separated tag string to array list
      */
     private ArrayList<String> convertTagList(String tags) {
+        ArrayList<String> result = new ArrayList<String>();
         if (StringUtils.isEmpty(tags) == false) {
             String[] tagArray = StringUtils.split(tags, ",");
             if (tagArray != null && tagArray.length > 0) {
-                ArrayList<String> result = new ArrayList<String>();
                 for (int i = 0; i < tagArray.length; i++) {
                     String tag = StringUtils.trim(tagArray[i]);
                     if (StringUtils.isEmpty(tag) == false) {
                         result.add(tag);
                     }
                 }
-                return result;
             }
         }
-        return null;
+        return result;
     }
 }
