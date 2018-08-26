@@ -9,7 +9,6 @@ import org.code13k.perri.model.config.channel.SlackInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 

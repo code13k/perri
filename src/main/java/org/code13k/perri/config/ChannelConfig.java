@@ -97,7 +97,7 @@ public class ChannelConfig extends BasicConfig {
                 }
                 final ArrayList<ChannelInfo> channelList = (ArrayList<ChannelInfo>) mConfigChannelList.get(key);
                 value.forEach(valueItem -> {
-                    mLogger.debug("" + valueItem);
+                    mLogger.trace("valueItem = " + valueItem);
 
                     // Type
                     mLogger.trace("valueItem class name = " + valueItem.getClass().getName());
@@ -112,7 +112,15 @@ public class ChannelConfig extends BasicConfig {
                         telegramInfo.setChatId((String) valueItemObject.get("chat_id"));
                         telegramInfo.setDisplayTags((Boolean) valueItemObject.get("display_tags"));
                         telegramInfo.setMergeDuplicateMessage((Boolean) valueItemObject.get("merge_duplicate_message"));
-                        channelList.add(telegramInfo);
+
+                        // Check validation
+                        if (StringUtils.isEmpty(telegramInfo.getBotId()) == true) {
+                            mLogger.error("Invalid telegram channel (bot_id is invalid)");
+                        } else if (StringUtils.isEmpty(telegramInfo.getChatId()) == true) {
+                            mLogger.error("Invalid telegram channel (chat_id is invalid)");
+                        } else {
+                            channelList.add(telegramInfo);
+                        }
                     }
 
                     // Slack
@@ -122,7 +130,13 @@ public class ChannelConfig extends BasicConfig {
                         slackInfo.setWebhookUrl((String) valueItemObject.get("webhook_url"));
                         slackInfo.setDisplayTags((Boolean) valueItemObject.get("display_tags"));
                         slackInfo.setMergeDuplicateMessage((Boolean) valueItemObject.get("merge_duplicate_message"));
-                        channelList.add(slackInfo);
+
+                        // Check validation
+                        if (StringUtils.isEmpty(slackInfo.getWebhookUrl()) == true) {
+                            mLogger.error("Invalid slack channel (webhook_url is invalid)");
+                        } else {
+                            channelList.add(slackInfo);
+                        }
                     }
 
                     // Webhook
@@ -132,16 +146,20 @@ public class ChannelConfig extends BasicConfig {
                         webhookInfo.setWebhookUrl((String) valueItemObject.get("webhook_url"));
                         webhookInfo.setDisplayTags((Boolean) valueItemObject.get("display_tags"));
                         webhookInfo.setMergeDuplicateMessage((Boolean) valueItemObject.get("merge_duplicate_message"));
-                        channelList.add(webhookInfo);
+
+                        // Check validation
+                        if (StringUtils.isEmpty(webhookInfo.getWebhookUrl()) == true) {
+                            mLogger.error("Invalid webhook channel (webhook_url is invalid)");
+                        } else {
+                            channelList.add(webhookInfo);
+                        }
                     }
 
                     // Not supported
                     else {
-                        mLogger.error("Not supported type : " + type);
+                        mLogger.warn("Not supported type : " + type);
                     }
-
                 });
-
             });
         } catch (Exception e) {
             mLogger.error("Failed to load config file", e);
