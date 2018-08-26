@@ -31,7 +31,7 @@ public class MessageManager {
      * Constructor
      */
     private MessageManager() {
-        mLogger.info("MessageManager()");
+        mLogger.trace("MessageManager()");
     }
 
     /**
@@ -46,5 +46,12 @@ public class MessageManager {
             messageOperation.setMessage(message);
             mMessageOperator.add(messageOperation);
         });
+    }
+
+    /**
+     * Number of ready message
+     */
+    public int numberOfReadyMessage(){
+        return mMessageOperator.queueSize();
     }
 }

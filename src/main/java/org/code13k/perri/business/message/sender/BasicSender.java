@@ -40,7 +40,7 @@ public abstract class BasicSender {
         sb.append("message sender");
         sb.append(")");
         String userAgent = sb.toString();
-        mLogger.debug("User-Agent = " + userAgent);
+        mLogger.trace("User-Agent = " + userAgent);
 
         // Init WebClient
         WebClientOptions options = new WebClientOptions();

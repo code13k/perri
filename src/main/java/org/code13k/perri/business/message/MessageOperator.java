@@ -20,7 +20,7 @@ public class MessageOperator {
      * Constructor
      */
     public MessageOperator() {
-        mLogger.info("MessageOperator()");
+        mLogger.trace("MessageOperator()");
         runMessageOperationThread();
     }
 
@@ -55,9 +55,9 @@ public class MessageOperator {
     }
 
     /**
-     * message operation count in ready
+     * Message operation count in queue (Ready)
      */
-    public int queueReadyCount() {
+    public int queueSize() {
         return mQueue.size();
     }
 
@@ -123,7 +123,7 @@ public class MessageOperator {
         };
         Thread thread = new Thread(runnable);
         thread.setPriority(Thread.MIN_PRIORITY);
-        thread.setName("MessageOperationThread");
+        thread.setName("perri-message-operation-thread");
         thread.start();
     }
 }
