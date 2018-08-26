@@ -104,14 +104,22 @@ public class ChannelConfig extends BasicConfig {
                     LinkedHashMap valueItemObject = valueItem;
                     String type = (String) valueItemObject.get("type");
 
+                    // Common
+                    Boolean displayTags = (Boolean) valueItemObject.getOrDefault("display_tags", true);
+                    Boolean mergeDuplicateMessage = (Boolean) valueItemObject.getOrDefault("merge_duplicate_message", true);
+
                     // Telegram
                     if (type.equalsIgnoreCase(ChannelType.TELEGRAM)) {
+                        String botId = (String) valueItemObject.getOrDefault("bot_id", "");
+                        String chatId = (String) valueItemObject.getOrDefault("chat_id", "");
+
+                        // Set Telegram
                         TelegramInfo telegramInfo = new TelegramInfo();
                         telegramInfo.setType(ChannelType.TELEGRAM);
-                        telegramInfo.setBotId((String) valueItemObject.get("bot_id"));
-                        telegramInfo.setChatId((String) valueItemObject.get("chat_id"));
-                        telegramInfo.setDisplayTags((Boolean) valueItemObject.get("display_tags"));
-                        telegramInfo.setMergeDuplicateMessage((Boolean) valueItemObject.get("merge_duplicate_message"));
+                        telegramInfo.setBotId(botId);
+                        telegramInfo.setChatId(chatId);
+                        telegramInfo.setDisplayTags(displayTags);
+                        telegramInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
 
                         // Check validation
                         if (StringUtils.isEmpty(telegramInfo.getBotId()) == true) {
@@ -125,11 +133,14 @@ public class ChannelConfig extends BasicConfig {
 
                     // Slack
                     else if (type.equalsIgnoreCase(ChannelType.SLACK)) {
+                        String webhookUrl = (String) valueItemObject.getOrDefault("webhook_url", "");
+
+                        // Set Slack
                         SlackInfo slackInfo = new SlackInfo();
                         slackInfo.setType(ChannelType.SLACK);
-                        slackInfo.setWebhookUrl((String) valueItemObject.get("webhook_url"));
-                        slackInfo.setDisplayTags((Boolean) valueItemObject.get("display_tags"));
-                        slackInfo.setMergeDuplicateMessage((Boolean) valueItemObject.get("merge_duplicate_message"));
+                        slackInfo.setWebhookUrl(webhookUrl);
+                        slackInfo.setDisplayTags(displayTags);
+                        slackInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
 
                         // Check validation
                         if (StringUtils.isEmpty(slackInfo.getWebhookUrl()) == true) {
@@ -141,11 +152,14 @@ public class ChannelConfig extends BasicConfig {
 
                     // Webhook
                     else if (type.equalsIgnoreCase(ChannelType.WEBHOOK)) {
+                        String webhookUrl = (String) valueItemObject.getOrDefault("webhook_url", "");
+
+                        // Set Webhook
                         WebhookInfo webhookInfo = new WebhookInfo();
                         webhookInfo.setType(ChannelType.WEBHOOK);
-                        webhookInfo.setWebhookUrl((String) valueItemObject.get("webhook_url"));
-                        webhookInfo.setDisplayTags((Boolean) valueItemObject.get("display_tags"));
-                        webhookInfo.setMergeDuplicateMessage((Boolean) valueItemObject.get("merge_duplicate_message"));
+                        webhookInfo.setWebhookUrl(webhookUrl);
+                        webhookInfo.setDisplayTags(displayTags);
+                        webhookInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
 
                         // Check validation
                         if (StringUtils.isEmpty(webhookInfo.getWebhookUrl()) == true) {
