@@ -1,5 +1,6 @@
 package org.code13k.perri.config;
 
+import org.code13k.perri.lib.Util;
 import org.code13k.perri.model.config.app.PortInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,17 +56,17 @@ public class AppConfig extends BasicConfig {
             mLogger.trace("portObject class name = " + portObject.getClass().getName());
             mLogger.trace("portObject = " + portObject);
             Integer portMainHttp = (Integer) portObject.get("main_http");
-            if (portMainHttp == null) {
-                mLogger.error("Invalid main port");
+            if (Util.isValidPortNumber(portMainHttp) == false) {
+                mLogger.error("Invalid main_http port : " + portMainHttp);
                 return false;
             }
             Integer portApiHttp = (Integer) portObject.get("api_http");
-            if (portApiHttp == null) {
-                mLogger.error("Invalid api_http port");
+            if (Util.isValidPortNumber(portApiHttp) == false) {
+                mLogger.error("Invalid api_http port : " + portApiHttp);
                 return false;
             }
             if (portMainHttp == portApiHttp) {
-                mLogger.error("Duplicated port bind : main_http=" + portMainHttp + ", api_http=" + portApiHttp);
+                mLogger.error("Duplicated port number : main_http=" + portMainHttp + ", api_http=" + portApiHttp);
                 return false;
             }
             mPortInfo.setMainHttp(portMainHttp);
