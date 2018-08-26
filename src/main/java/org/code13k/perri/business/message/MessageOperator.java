@@ -26,8 +26,6 @@ public class MessageOperator {
 
     /**
      * Add message operation to queue
-     * <p>
-     * TODO Does it need to check duplicates?
      */
     public void add(MessageOperation messageOperation) {
         synchronized (mQueue) {
@@ -55,7 +53,7 @@ public class MessageOperator {
     }
 
     /**
-     * Message operation count in queue (Ready)
+     * Number of message operation in queue (Ready)
      */
     public int queueSize() {
         return mQueue.size();
