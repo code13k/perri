@@ -38,7 +38,7 @@ public class ApiHttpServer extends AbstractVerticle {
 
         // Routing
         Router router = Router.router(vertx);
-        setStatusRouter(router);
+        setAppRouter(router);
 
         // Listen
         httpServer.requestHandler(router::accept).listen();
@@ -73,9 +73,9 @@ public class ApiHttpServer extends AbstractVerticle {
 
 
     /**
-     * Set status router
+     * Set app router
      */
-    private void setStatusRouter(Router router) {
+    private void setAppRouter(Router router) {
         // GET /info
         router.route().method(HttpMethod.GET).path("/app/status").handler(routingContext -> {
             routingContext.request().endHandler(new Handler<Void>() {
