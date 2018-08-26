@@ -3,6 +3,7 @@ package org.code13k.perri.app;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,6 +11,9 @@ import java.util.TimerTask;
 public class Status {
     // Logger
     private static final Logger mLogger = LoggerFactory.getLogger(Status.class);
+
+    // Const
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"; // RFC3339
 
     // Data
     private final Date mAppStartedDate = new Date();
@@ -69,4 +73,38 @@ public class Status {
     public Date getAppStartedDate() {
         return mAppStartedDate;
     }
+
+    /**
+     * Get application started time string
+     */
+    public String getAppStartedDateString(){
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        String formattedDate = sdf.format(Status.getInstance().getAppStartedDate());
+        return formattedDate;
+    }
+
+    /**
+     * Get current time string
+     */
+    public String getCurrentDateString(){
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        String formattedDate = sdf.format(new Date());
+        return formattedDate;
+    }
+
+    /**
+     * Get application running time (hour)
+     */
+    public int getAppRunningTimeHour(){
+        long createdTimestamp = Status.getInstance().getAppStartedDate().getTime();
+        long runningTimestamp = System.currentTimeMillis() - createdTimestamp;
+        int runningTimeSec = (int) (runningTimestamp / 1000);
+        int runningTimeMin = runningTimeSec / 60;
+        int runningTimeHour = runningTimeMin / 60;
+        return runningTimeHour;
+    }
+
+
+
+
 }

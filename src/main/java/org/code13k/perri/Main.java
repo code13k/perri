@@ -76,8 +76,17 @@ public class Main {
         }
 
         // Run
-        Vertx.vertx().deployVerticle(MainHttpServer.class.getName());
-        Vertx.vertx().deployVerticle(ApiHttpServer.class.getName());
+        try {
+            Vertx.vertx().deployVerticle(MainHttpServer.class.getName());
+            Thread.sleep(1000);
+            Vertx.vertx().deployVerticle(ApiHttpServer.class.getName());
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            mLogger.error("Failed to run server", e);
+            return;
+        }
+
+        // End
         mLogger.info("Running application is successful.");
     }
 }
