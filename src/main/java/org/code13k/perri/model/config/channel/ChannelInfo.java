@@ -4,8 +4,8 @@ import org.code13k.perri.model.BasicModel;
 
 public class ChannelInfo extends BasicModel {
     private String type;
-    private boolean displayTags;
-    private boolean mergeDuplicateMessage;
+    private boolean displayTags = true;
+    private boolean mergeDuplicateMessage = true    ;
 
     @Override
     public boolean equals(Object object) {
