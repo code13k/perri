@@ -27,8 +27,11 @@ public class MainHttpServer extends AbstractVerticle {
     // Logger
     private static final Logger mLogger = LoggerFactory.getLogger(MainHttpServer.class);
 
-    // Port
+    // Const
     public static final int PORT = AppConfig.getInstance().getPort().getMainHttp();
+
+    // Data
+    private HttpServerOptions mHttpServerOptions = new HttpServerOptions();
 
     /**
      * start()
@@ -39,11 +42,10 @@ public class MainHttpServer extends AbstractVerticle {
         mLogger.trace("start()");
 
         // Init HTTP APIHttpServer
-        HttpServerOptions httpServerOptions = new HttpServerOptions();
-        httpServerOptions.setCompressionSupported(true);
-        httpServerOptions.setPort(PORT);
-        httpServerOptions.setIdleTimeout(10); // seconds
-        HttpServer httpServer = vertx.createHttpServer(httpServerOptions);
+        mHttpServerOptions.setCompressionSupported(true);
+        mHttpServerOptions.setPort(PORT);
+        mHttpServerOptions.setIdleTimeout(5); // seconds
+        HttpServer httpServer = vertx.createHttpServer(mHttpServerOptions);
 
         // Routing
         Router router = Router.router(vertx);
@@ -51,6 +53,28 @@ public class MainHttpServer extends AbstractVerticle {
 
         // Listen
         httpServer.requestHandler(router::accept).listen();
+
+        // End
+        logging();
+    }
+
+    /**
+     * Logging
+     */
+    private void logging() {
+        // Begin
+        mLogger.info("------------------------------------------------------------------------");
+        mLogger.info("Main Http Server");
+        mLogger.info("------------------------------------------------------------------------");
+
+        // Http Server Options
+        mLogger.info("Port = " + mHttpServerOptions.getPort());
+        mLogger.info("Idle timeout (second) = " + mHttpServerOptions.getIdleTimeout());
+        mLogger.info("Compression supported = " + mHttpServerOptions.isCompressionSupported());
+        mLogger.info("Compression level = " + mHttpServerOptions.getCompressionLevel());
+
+        // End
+        mLogger.info("------------------------------------------------------------------------");
     }
 
     /**
