@@ -55,13 +55,13 @@ public class Main {
         }
 
         // System Properties
-        mLogger.info("------------------------------------------------------------------------");
-        mLogger.info("System Property");
-        mLogger.info("------------------------------------------------------------------------");
+        mLogger.debug("------------------------------------------------------------------------");
+        mLogger.debug("System Property");
+        mLogger.debug("------------------------------------------------------------------------");
         System.getProperties().forEach((key, value) -> {
-            mLogger.info(key + " = " + value);
+            mLogger.debug(key + " = " + value);
         });
-        mLogger.info("------------------------------------------------------------------------");
+        mLogger.debug("------------------------------------------------------------------------");
 
         // Initialize
         try {
