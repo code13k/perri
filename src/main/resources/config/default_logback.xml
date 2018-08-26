@@ -2,27 +2,26 @@
 <configuration scan="true" scanPeriod="30 seconds">
     <!-- Stdout -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
+        <encoder>
             <pattern>%highlight([%d{MM-dd HH:mm}] [%level] [%thread] [%logger{16}:%line]) %msg%n</pattern>
-        </layout>
+        </encoder>
     </appender>
 
     <!-- File -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>log/perri.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>log/perri-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>10</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxFileSize>100MB</maxFileSize>
         </rollingPolicy>
         <encoder>
-            <Pattern>[%d{MM-dd HH:mm}] [%level] [%thread] [%logger{16}:%line] %msg%n</Pattern>
+            <pattern>[%d{MM-dd HH:mm}] [%level] [%thread] [%logger{16}:%line] %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Telegram for error -->
+    <!-- Telegram -->
+    <!--
     <appender name="TELEGRAM-ERROR" class="com.github.paolodenti.telegram.logback.TelegramAppender">
         <botToken></botToken>
         <chatId></chatId>
@@ -34,6 +33,7 @@
             <level>ERROR</level>
         </filter>
     </appender>
+    -->
 
     <!-- Mode -->
     <logger name="org.code13k.perri" level="TRACE"/>
