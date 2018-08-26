@@ -61,24 +61,30 @@ public class MainHttpServer extends AbstractVerticle {
      * Logging
      */
     private void logging(HttpServerOptions httpServerOptions, Router router) {
-        // Begin
-        mLogger.info("------------------------------------------------------------------------");
-        mLogger.info("Main HTTP Server");
-        mLogger.info("------------------------------------------------------------------------");
+        synchronized (mLogger) {
+            // Begin
+            mLogger.info("------------------------------------------------------------------------");
+            mLogger.info("Main HTTP Server");
+            mLogger.info("------------------------------------------------------------------------");
 
-        // Http Server Options
-        mLogger.info("Port = " + httpServerOptions.getPort());
-        mLogger.info("Idle timeout (second) = " + httpServerOptions.getIdleTimeout());
-        mLogger.info("Compression supported = " + httpServerOptions.isCompressionSupported());
-        mLogger.info("Compression level = " + httpServerOptions.getCompressionLevel());
+            // Vert.x
+            mLogger.info("Vert.x clustered = " + getVertx().isClustered());
+            mLogger.info("Vert.x deployment ID = " + deploymentID());
 
-        // Route
-        router.getRoutes().forEach(r -> {
-            mLogger.info("Routing path = " + r.getPath());
-        });
+            // Http Server Options
+            mLogger.info("Port = " + httpServerOptions.getPort());
+            mLogger.info("Idle timeout (second) = " + httpServerOptions.getIdleTimeout());
+            mLogger.info("Compression supported = " + httpServerOptions.isCompressionSupported());
+            mLogger.info("Compression level = " + httpServerOptions.getCompressionLevel());
 
-        // End
-        mLogger.info("------------------------------------------------------------------------");
+            // Route
+            router.getRoutes().forEach(r -> {
+                mLogger.info("Routing path = " + r.getPath());
+            });
+
+            // End
+            mLogger.info("------------------------------------------------------------------------");
+        }
     }
 
     /**

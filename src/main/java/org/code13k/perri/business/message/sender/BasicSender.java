@@ -1,6 +1,7 @@
 package org.code13k.perri.business.message.sender;
 
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import org.code13k.perri.app.Env;
@@ -42,15 +43,21 @@ public abstract class BasicSender {
         String userAgent = sb.toString();
         mLogger.trace("User-Agent = " + userAgent);
 
-        // Init WebClient
-        WebClientOptions options = new WebClientOptions();
-        options.setUserAgent(userAgent);
-        options.setTrustAll(true);
-        options.setSsl(true);
-        options.setTryUseCompression(true);
-        options.setConnectTimeout(10 * 1000); // 10 Seconds
-        options.setIdleTimeout(20 * 1000); // 20 Seconds
-        mWebClient = WebClient.create(Vertx.vertx(), options);
+        // WebClientOptions
+        WebClientOptions webClientOptions = new WebClientOptions();
+        webClientOptions.setUserAgent(userAgent);
+        webClientOptions.setTrustAll(true);
+        webClientOptions.setSsl(true);
+        webClientOptions.setTryUseCompression(true);
+        webClientOptions.setConnectTimeout(10 * 1000); // 10 Seconds
+        webClientOptions.setIdleTimeout(20 * 1000); // 20 Seconds
+
+        // Init VertxOptions
+        VertxOptions vertxOptions = new VertxOptions();
+        vertxOptions.setEventLoopPoolSize(1);
+
+        // Create WebClient
+        mWebClient = WebClient.create(Vertx.vertx(vertxOptions), webClientOptions);
     }
 
     /**

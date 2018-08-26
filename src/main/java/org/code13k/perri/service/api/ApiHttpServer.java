@@ -2,6 +2,8 @@ package org.code13k.perri.service.api;
 
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.http.*;
 import io.vertx.ext.web.Router;
@@ -26,7 +28,6 @@ public class ApiHttpServer extends AbstractVerticle {
      */
     @Override
     public void start() throws Exception {
-        super.start();
         mLogger.trace("start()");
 
         // Init
@@ -51,24 +52,30 @@ public class ApiHttpServer extends AbstractVerticle {
      * Logging
      */
     private void logging(HttpServerOptions httpServerOptions, Router router) {
-        // Begin
-        mLogger.info("------------------------------------------------------------------------");
-        mLogger.info("API HTTP Server");
-        mLogger.info("------------------------------------------------------------------------");
+        synchronized (mLogger) {
+            // Begin
+            mLogger.info("------------------------------------------------------------------------");
+            mLogger.info("API HTTP Server");
+            mLogger.info("------------------------------------------------------------------------");
 
-        // Http Server Options
-        mLogger.info("Port = " + httpServerOptions.getPort());
-        mLogger.info("Idle timeout (second) = " + httpServerOptions.getIdleTimeout());
-        mLogger.info("Compression supported = " + httpServerOptions.isCompressionSupported());
-        mLogger.info("Compression level = " + httpServerOptions.getCompressionLevel());
+            // Vert.x
+            mLogger.info("Vert.x clustered = " + getVertx().isClustered());
+            mLogger.info("Vert.x deployment ID = " + deploymentID());
 
-        // Route
-        router.getRoutes().forEach(r -> {
-            mLogger.info("Routing path = " + r.getPath());
-        });
+            // Http Server Options
+            mLogger.info("Port = " + httpServerOptions.getPort());
+            mLogger.info("Idle timeout (second) = " + httpServerOptions.getIdleTimeout());
+            mLogger.info("Compression supported = " + httpServerOptions.isCompressionSupported());
+            mLogger.info("Compression level = " + httpServerOptions.getCompressionLevel());
 
-        // End
-        mLogger.info("------------------------------------------------------------------------");
+            // Route
+            router.getRoutes().forEach(r -> {
+                mLogger.info("Routing path = " + r.getPath());
+            });
+
+            // End
+            mLogger.info("------------------------------------------------------------------------");
+        }
     }
 
 

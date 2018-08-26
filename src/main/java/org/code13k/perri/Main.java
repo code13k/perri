@@ -1,5 +1,6 @@
 package org.code13k.perri;
 
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import org.code13k.perri.config.AppConfig;
 import org.code13k.perri.config.LogConfig;
@@ -75,14 +76,25 @@ public class Main {
             return;
         }
 
-        // Run
+        // Deploy MainHttpServer
         try {
-            Vertx.vertx().deployVerticle(MainHttpServer.class.getName());
-            Thread.sleep(1000);
-            Vertx.vertx().deployVerticle(ApiHttpServer.class.getName());
+            DeploymentOptions options = new DeploymentOptions();
+            options.setInstances(Math.max(1, Env.getInstance().getProcessorCount() / 2));
+            Vertx.vertx().deployVerticle(MainHttpServer.class.getName(), options);
             Thread.sleep(1000);
         } catch (Exception e) {
-            mLogger.error("Failed to run server", e);
+            mLogger.error("Failed to deploy MainHttpServer", e);
+            return;
+        }
+
+        // Deploy APIHttpServer
+        try {
+            DeploymentOptions options = new DeploymentOptions();
+            options.setInstances(Math.max(1, Env.getInstance().getProcessorCount() / 2));
+            Vertx.vertx().deployVerticle(ApiHttpServer.class.getName(), options);
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            mLogger.error("Failed to deploy ApiHttpServer", e);
             return;
         }
 
