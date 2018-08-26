@@ -3,12 +3,16 @@ package org.code13k.perri.app;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Status {
     // Logger
     private static final Logger mLogger = LoggerFactory.getLogger(Status.class);
+
+    // Data
+    private final Date mAppStartedDate = new Date();
 
     /**
      * Singleton
@@ -57,5 +61,12 @@ public class Status {
         mLogger.warn("This is WARN Log!");
         mLogger.error("This is ERROR Log!");
         */
+    }
+
+    /**
+     * Get application started time
+     */
+    public Date getAppStartedDate() {
+        return mAppStartedDate;
     }
 }
