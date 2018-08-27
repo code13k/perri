@@ -71,37 +71,7 @@ public class SlackSender extends BasicSender {
      */
     private JsonObject makeBody(MessageOperation messageOperation) {
         try {
-            Message message = messageOperation.getMessage();
-            SlackInfo slackInfo = (SlackInfo) messageOperation.getChannelInfo();
-
-            // Make additional string
-            StringBuffer sb1 = new StringBuffer();
-            if (slackInfo.isDisplayTags() == true) {
-                ArrayList<String> tags = message.getTags();
-                if (tags != null) {
-                    tags.forEach(tag -> {
-                        sb1.append("#");
-                        sb1.append(tag);
-                        sb1.append(" ");
-                    });
-                }
-            }
-            String additionalText = sb1.toString();
-
-            // Make Sending Message Text
-            StringBuffer sb2 = new StringBuffer();
-            sb2.append(message.getText());
-            if(StringUtils.isEmpty(additionalText)==false){
-                sb2.append("\n");
-                sb2.append(additionalText);
-            }
-            if (messageOperation.getMessageCount() > 1) {
-                sb2.append("\n");
-                sb2.append("(Received ");
-                sb2.append(messageOperation.getMessageCount());
-                sb2.append(" duplicate messages)");
-            }
-            String text = sb2.toString();
+            String text = buildDisplayMessage(messageOperation, 4000);
 
             // Make Body
             JsonObject vertxJsonObject = new JsonObject();

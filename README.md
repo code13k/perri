@@ -80,12 +80,13 @@ http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
   * It's "channel_name" in channel_config.yml
 * message
   * Sending message
-  * Maximum length is 3073byte.
+  * If message length are more than supported maximum length, truncate string with ellipsis.
 * tags
   * It's optional
   * Tags of message
-  * Comma separated
-  * Maximum length is 512byte.
+  * Comma or space separated
+  * Max 20 tags (If tags count are more than maximum, ignore some tags )
+  * Max 30 characters per tag (If tag characters more than maximum, ignore tag)
 
 ### Example
 ```html

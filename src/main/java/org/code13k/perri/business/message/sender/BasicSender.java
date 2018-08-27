@@ -4,11 +4,17 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
+import org.apache.commons.lang3.StringUtils;
 import org.code13k.perri.app.Env;
+import org.code13k.perri.model.Message;
 import org.code13k.perri.model.MessageOperation;
+import org.code13k.perri.model.config.channel.ChannelInfo;
+import org.code13k.perri.model.config.channel.TelegramInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public abstract class BasicSender {
@@ -68,7 +74,73 @@ public abstract class BasicSender {
     }
 
     /**
+     * Build message for display
+     */
+    public static String buildDisplayMessage(MessageOperation messageOperation, int maximumNumberOfCharacters) {
+        Message message = messageOperation.getMessage();
+        ChannelInfo channelInfo = messageOperation.getChannelInfo();
+
+        // Build tags string
+        StringBuffer sbTags = new StringBuffer();
+        if (channelInfo.isDisplayTags() == true) {
+            ArrayList<String> tags = message.getTags();
+            if (tags != null) {
+                tags.forEach(tag -> {
+                    sbTags.append("#");
+                    sbTags.append(tag);
+                    sbTags.append(" ");
+                });
+            }
+        }
+        String tagsString = sbTags.toString();
+
+        // Build duplicate string
+        StringBuffer sbDuplicate = new StringBuffer();
+        if (messageOperation.getMessageCount() > 1) {
+            sbDuplicate.append("(Received ");
+            sbDuplicate.append(messageOperation.getMessageCount());
+            sbDuplicate.append(" duplicate messages)");
+        }
+        String duplicateString = sbDuplicate.toString();
+
+        // Build message string
+        String messageString = message.getText();
+
+        // Calculate
+        int etcLength = 4;
+        int totalLength = tagsString.length() + duplicateString.length() + messageString.length() + etcLength;
+        if (maximumNumberOfCharacters < totalLength) {
+            String ellipsisString = " ...";
+            int ellipsisLength = ellipsisString.length() + 1;
+            int overLength = (totalLength - maximumNumberOfCharacters) + ellipsisLength;
+            messageString = messageString.substring(0, messageString.length() - overLength);
+            messageString = messageString + ellipsisString;
+        }
+
+        // Build result string
+        StringBuffer sbResult = new StringBuffer();
+        sbResult.append(messageString);
+        if(StringUtils.isEmpty(tagsString)==false) {
+            sbResult.append("\n");
+            sbResult.append(tagsString);
+        }
+        if(StringUtils.isEmpty(duplicateString)==false){
+            sbResult.append("\n");
+            sbResult.append(duplicateString);
+        }
+
+        // End
+        return sbResult.toString();
+    }
+
+    /**
      * Send message
      */
     public abstract void send(MessageOperation messageOperation, Consumer<Integer> consumer);
 }
+
+
+
+
+
+

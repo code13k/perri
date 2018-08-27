@@ -70,37 +70,8 @@ public class TelegramSender extends BasicSender {
      */
     private String makeTelegramUri(MessageOperation messageOperation) {
         try {
-            Message message = messageOperation.getMessage();
             TelegramInfo telegramInfo = (TelegramInfo) messageOperation.getChannelInfo();
-
-            // Make additional string
-            StringBuffer sb1 = new StringBuffer();
-            if (telegramInfo.isDisplayTags() == true) {
-                ArrayList<String> tags = message.getTags();
-                if (tags != null) {
-                    tags.forEach(tag -> {
-                        sb1.append("#");
-                        sb1.append(tag);
-                        sb1.append(" ");
-                    });
-                }
-            }
-            String additionalText = sb1.toString();
-
-            // Make Sending Message Text
-            StringBuffer sb2 = new StringBuffer();
-            sb2.append(message.getText());
-            if(StringUtils.isEmpty(additionalText)==false){
-                sb2.append("\n");
-                sb2.append(additionalText);
-            }
-            if (messageOperation.getMessageCount() > 1) {
-                sb2.append("\n");
-                sb2.append("(Received ");
-                sb2.append(messageOperation.getMessageCount());
-                sb2.append(" duplicate messages)");
-            }
-            String text = sb2.toString();
+            String text = buildDisplayMessage(messageOperation, 4000);
             String urlEncodedText = URLEncoder.encode(text, "UTF-8");
 
             // Make URL

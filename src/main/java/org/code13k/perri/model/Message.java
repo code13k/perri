@@ -50,4 +50,18 @@ public class Message extends BasicModel {
     public ArrayList<String> getTags() {
         return tags;
     }
+
+    public String getCommaSeparatedTags(){
+        StringBuffer sb = new StringBuffer();
+        if (tags != null && tags.size() > 0) {
+            for (int i = 0; i < tags.size(); i++) {
+                sb.append(tags.get(i));
+                if (i < tags.size() - 1) {
+                    sb.append(",");
+                }
+            }
+            return sb.toString();
+        }
+        return "";
+    }
 }

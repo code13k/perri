@@ -16,6 +16,7 @@ import org.code13k.perri.business.message.MessageManager;
 import org.code13k.perri.config.AppConfig;
 import org.code13k.perri.config.ChannelConfig;
 import org.code13k.perri.model.Message;
+import org.code13k.perri.model.MessageOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -188,45 +189,10 @@ public class MainHttpServer extends AbstractVerticle {
             return;
         }
 
-        // Limit message byte (3K = 3072byte)
-        try {
-            int maxByte = 3072;
-            String urlEncodedMessage = URLEncoder.encode(message, "UTF-8");
-            int urlEncodedMessageByte = urlEncodedMessage.getBytes().length;
-            if (urlEncodedMessageByte > maxByte) {
-                mLogger.info("Message is too long (maximum byte is " + maxByte + "byte)");
-                int endIndex = urlEncodedMessageByte - (urlEncodedMessageByte - maxByte);
-                message = new String(message.getBytes(), 0, endIndex);
-                message += " ...";
-            }
-        } catch (Exception e) {
-            mLogger.error("Failed to limit message", e);
-            responseHttpError(routingContext, 500, "Internal server error");
-            return;
-        }
-
-        // Limit tags byte (512byte)
-        ArrayList<String> tagList = new ArrayList<>();
-        ArrayList<String> tempTagList = convertTagList(tags);
-        try {
-            int maxByte = 512;
-            int totalByte = 0;
-            int idx = 0;
-            for (idx = 0; idx < tempTagList.size(); idx++) {
-                String urlEncodedTag = tempTagList.get(idx);
-                totalByte += urlEncodedTag.getBytes().length;
-                if (totalByte > maxByte) {
-                    mLogger.info("Tags is too long (maximum byte is " + maxByte + "byte)");
-                    break;
-                }
-                tagList.add(tempTagList.get(idx));
-            }
-        } catch (Exception e) {
-            mLogger.error("Failed to limit tags", e);
-            responseHttpError(routingContext, 500, "Internal server error");
-            return;
-        }
-        mLogger.trace("tagList = " + tagList);
+        // Tags
+        ArrayList<String> tempTagList = convertToTagList(tags);
+        ArrayList<String> tagList = filteredTagList(tempTagList);
+        mLogger.debug("filteredTags # " + tagList);
 
         // Process
         Message messageObject = new Message();
@@ -237,13 +203,35 @@ public class MainHttpServer extends AbstractVerticle {
         responseHttpOK(routingContext);
     }
 
+
     /**
-     * convert comma separated tag string to array list
+     * Filtered tag list
+     * <p>
+     * [Limit tags]
+     * Max 20 tags (If tags count are more than maximum, ignore some tags )
+     * Max 30 characters per tag (If tag characters more than maximum, ignore tag)
      */
-    private ArrayList<String> convertTagList(String tags) {
+    public static ArrayList<String> filteredTagList(ArrayList<String> tagList) {
+        ArrayList<String> validTagList = new ArrayList<>();
+        for (int index = 0; index < tagList.size(); index++) {
+            String tag = tagList.get(index);
+            if (tag.length() <= 30) {
+                validTagList.add(tag);
+                if (validTagList.size() >= 20) {
+                    break;
+                }
+            }
+        }
+        return validTagList;
+    }
+
+    /**
+     * convert tag string to array list
+     */
+    private ArrayList<String> convertToTagList(String tags) {
         ArrayList<String> result = new ArrayList<String>();
         if (StringUtils.isEmpty(tags) == false) {
-            String[] tagArray = StringUtils.split(tags, ",");
+            String[] tagArray = StringUtils.split(tags, " ,");
             if (tagArray != null && tagArray.length > 0) {
                 for (int i = 0; i < tagArray.length; i++) {
                     String tag = StringUtils.trim(tagArray[i]);

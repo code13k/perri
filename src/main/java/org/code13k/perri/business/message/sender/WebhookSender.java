@@ -71,24 +71,13 @@ public class WebhookSender extends BasicSender {
     private JsonObject makeBody(MessageOperation messageOperation) {
         try {
             Message message = messageOperation.getMessage();
-
-            // Make tag string
-            StringBuffer sb1 = new StringBuffer();
-            if (message.getTags() != null && message.getTags().size() > 0) {
-                for (int i = 0; i < message.getTags().size(); i++) {
-                    sb1.append(message.getTags().get(i));
-                    if (i < message.getTags().size() - 1) {
-                        sb1.append(",");
-                    }
-                }
-            }
-            String tagString = sb1.toString();
+            String text = buildDisplayMessage(messageOperation, 4000);
 
             // Make Body
             JsonObject vertxJsonObject = new JsonObject();
             vertxJsonObject.put("channel", message.getChannel());
-            vertxJsonObject.put("message", message.getText());
-            vertxJsonObject.put("tags", tagString);
+            vertxJsonObject.put("message", text);
+            vertxJsonObject.put("tags", message.getCommaSeparatedTags());
             vertxJsonObject.put("duplicated", messageOperation.getMessageCount());
 
             // End
