@@ -56,7 +56,7 @@ It's channel configuration file.
 ## logback.xml
 It's Logback configuration file that is famous logging library.
 * You can send error log to Telegram.
-* You can reload configuration but not need to restart application.
+* You can reload configuration but need not to restart application.
 
 
 
@@ -72,10 +72,20 @@ The other is a restful API server that provide application information and addit
 ```html
 http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
 ```
-* port : Server port. It's "main_http" in app_config.yml.
-* channel_name : Channel name. It's "channel_name" in channel_config.yml
-* message : Sending message. Maximum length is 3073byte.
-* tags : It's optional. Tags of message. Comma separated. Maximum length is 512byte.
+* port
+  * Server port
+  * It's "main_http" in app_config.yml.
+* channel_name
+  * Channel name
+  * It's "channel_name" in channel_config.yml
+* message
+  * Sending message
+  * Maximum length is 3073byte.
+* tags
+  * It's optional
+  * Tags of message
+  * Comma separated
+  * Maximum length is 512byte.
 
 ### Example
 ```html
