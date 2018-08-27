@@ -85,6 +85,23 @@ http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
 http://example.com:59490/perri_default_channel?message=hello&tags=world,perri,tag
 ```
 
+#### Channel
+##### Telegram
+Send message to Telegram using bot_id and chat_id
+
+##### Slack
+Send message to Slack using webhook_url
+
+##### Webhook
+Send message to specific url via an HTTP POST request.
+```json
+{
+  "channel": "perri_default_channel",
+  "message": "webhook message",
+  "tags": "tag1,tag2,tag3",
+  "duplicated": 2
+}
+```
 
 
 ### API HTTP Server
@@ -107,8 +124,7 @@ http://example.com:59491/app/ping
  
 ```json
 
-{"data":
-  {
+{"data":{
     "applicationVersion":"0.1.0-alpha.3",
     "cpuUsage":2.56,
     "threadInfo":{...},
