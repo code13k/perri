@@ -1,30 +1,27 @@
-# Perri
-[![Build Status](https://travis-ci.org/code13k/perri.svg?branch=master)](https://travis-ci.org/code13k/perri)
-
-
-## Overview
+# Perri send a message to multiple messenger at once.
 We use Telegram and Slack to receive system monitoring message. 
 We need to manage message and unify the methods. 
 So we start to develop centralized server to easily send message to Telegram and Slack at once.
-Perri send a message to multiple messenger at once.
+
+[![Build Status](https://travis-ci.org/code13k/perri.svg?branch=master)](https://travis-ci.org/code13k/perri)
 
 
 
-## Supported messenger
+# Supported messenger
 * Telegram
 * Slack
 * Webhook
 
 
 
-## Configuration
+# Configuration
 Automatically, default configuration files are created when application is executed. 
 You can make default configuration files through just executing application and modify it for you.
 You can find it at config directory.
 
 Perri has three configuration files.
 
-### app_config.yml
+## app_config.yml
 It's application configuration file.
 ```yaml
 # Server port
@@ -33,7 +30,7 @@ port:
   api_http: 59491
 ```
 
-### channel_config.yml
+## channel_config.yml
 It's channel configuration file.
 ```yaml
 # Unique channel name 
@@ -56,22 +53,22 @@ It's channel configuration file.
   merge_duplicate_message: true
 ```
 
-### logback.xml
+## logback.xml
 It's Logback configuration file that is famous logging library.
 * You can send error log to Telegram.
 * You can reload configuration but not need to restart application.
 
 
 
-## Server
+# Server
 Perri has two servers. 
 One is a main server that send message to messenger.
 The other is a restful API server that provide application information and additional functions.
 
 
 
-### Main HTTP Server
-#### Usage
+## Main HTTP Server
+### Usage
 ```html
 http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
 ```
@@ -80,19 +77,19 @@ http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
 * message : Sending message. Maximum length is 3073byte.
 * tags : It's optional. Tags of message. Comma separated. Maximum length is 512byte.
 
-#### Example
+### Example
 ```html
 http://example.com:59490/perri_default_channel?message=hello&tags=world,perri,tag
 ```
 
-#### Channel
-##### Telegram
+### Channel
+#### Telegram
 Send message to Telegram using bot_id and chat_id
 
-##### Slack
+#### Slack
 Send message to Slack using webhook_url
 
-##### Webhook
+#### Webhook
 Send message to specific url via an HTTP POST request.
 ```json
 {
@@ -104,21 +101,21 @@ Send message to specific url via an HTTP POST request.
 ```
 
 
-### API HTTP Server
-#### Usage
+## API HTTP Server
+### Usage
 ```html
 http://example.com:{port}/{domain}/{method}
 ```
 
-#### Example
+### Example
 ```html
 http://example.com:59491/app/status
 http://example.com:59491/app/hello
 http://example.com:59491/app/ping
 ```
 
-#### API
-##### GET /app/status
+### API
+#### GET /app/status
 * Get application status and environment.
 * Parameter : None
  
@@ -146,7 +143,7 @@ http://example.com:59491/app/ping
   }
 }
 ```
-##### GET /app/hello
+#### GET /app/hello
 * Hello, World
 * Parameter : None
 
@@ -154,7 +151,7 @@ http://example.com:59491/app/ping
 {"data":"world"}
 ```
 
-##### GET /app/ping
+#### GET /app/ping
 * Ping-Pong
 * Parameter : None
 
