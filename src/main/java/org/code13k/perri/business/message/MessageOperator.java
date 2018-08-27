@@ -1,5 +1,6 @@
 package org.code13k.perri.business.message;
 
+import org.code13k.perri.app.Status;
 import org.code13k.perri.business.message.sender.BasicSender;
 import org.code13k.perri.business.message.sender.SenderFactory;
 import org.code13k.perri.model.MessageOperation;
@@ -72,6 +73,7 @@ public class MessageOperator {
                 public void accept(Integer result) {
                     if (result == BasicSender.SendResult.SUCCESS) {
                         mLogger.debug("The operation has succeeded. (" + type + ")");
+                        Status.getInstance().increaseSentMessageCount();
                     } else if (result == BasicSender.SendResult.FAILURE) {
                         mLogger.error("The operation has failed. (" + type + ")");
                     } else if (result == BasicSender.SendResult.TEMPORARY_FAILURE) {

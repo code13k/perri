@@ -18,6 +18,7 @@ public class Status {
 
     // Data
     private final Date mAppStartedDate = new Date();
+    private long mSentMessageCount = 0;
 
     /**
      * Singleton
@@ -62,7 +63,12 @@ public class Status {
         StringBuffer sb = new StringBuffer();
 
         // Number of ready message
-        sb.append("Ready message = "+ MessageManager.getInstance().numberOfReadyMessage());
+        sb.append("Ready message = " + MessageManager.getInstance().numberOfReadyMessage());
+
+        // Number of sent message
+        sb.append(", Sent message = "+ getSentMessageCount());
+        // Running time (hour)
+        sb.append(", Running time = " + getAppRunningTimeHour() + "h");
 
         // End
         mLogger.info(sb.toString());
@@ -78,7 +84,7 @@ public class Status {
     /**
      * Get application started time string
      */
-    public String getAppStartedDateString(){
+    public String getAppStartedDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         String formattedDate = sdf.format(Status.getInstance().getAppStartedDate());
         return formattedDate;
@@ -87,7 +93,7 @@ public class Status {
     /**
      * Get current time string
      */
-    public String getCurrentDateString(){
+    public String getCurrentDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         String formattedDate = sdf.format(new Date());
         return formattedDate;
@@ -96,12 +102,26 @@ public class Status {
     /**
      * Get application running time (hour)
      */
-    public int getAppRunningTimeHour(){
+    public int getAppRunningTimeHour() {
         long createdTimestamp = Status.getInstance().getAppStartedDate().getTime();
         long runningTimestamp = System.currentTimeMillis() - createdTimestamp;
         int runningTimeSec = (int) (runningTimestamp / 1000);
         int runningTimeMin = runningTimeSec / 60;
         int runningTimeHour = runningTimeMin / 60;
         return runningTimeHour;
+    }
+
+    /**
+     * Get sent message count
+     */
+    public long getSentMessageCount(){
+        return mSentMessageCount;
+    }
+
+    /**
+     * Increase(+1) sent message count;
+     */
+    public void increaseSentMessageCount(){
+        mSentMessageCount++;
     }
 }
