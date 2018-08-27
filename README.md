@@ -56,6 +56,38 @@ It's channel configuration file.
 ## logback.xml
 It's Logback configuration file that is famous logging library.
 * You can send error log to Telegram.
+  * Uncomment *Telegram* configuration.
+  * Insert *<appender-ref ref="TELEGRAM"/>* into root tag.
+    ```xml
+    <root level="WARN">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="TELEGRAM"/>
+    </root>
+    ```
+  * Set value of botToken tag and chatId tag.
+    ```xml
+    <appender name="TELEGRAM-ERROR" class="com.github.paolodenti.telegram.logback.TelegramAppender">
+        <botToken></botToken>
+        <chatId></chatId>
+        ...
+    </appender>
+    ```
+* You can send error log to Slack.
+  * Uncomment *Slack* configuration.
+  * Insert *<appender-ref ref="SLACK"/>* into root tag.
+    ```xml
+    <root level="WARN">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="SLACK"/>
+    </root>
+    ```
+  * Set value of webhookUri tag.
+    ```xml
+    <appender name="SLACK_SYNC" class="com.github.maricn.logback.SlackAppender">
+        <webhookUri></webhookUri>
+        ...
+    </appender>
+    ```
 * You can reload configuration but need not to restart application.
 
 
