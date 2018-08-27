@@ -1,13 +1,13 @@
 package org.code13k.perri.model.config.channel;
 
 public class SlackInfo extends ChannelInfo {
-    private String webhookUrl;
+    private String incomingWebhookUrl;
 
     @Override
     public boolean equals(Object object) {
         if (super.equals(object) == true) {
             if (object instanceof SlackInfo) {
-                if (this.getWebhookUrl().equals(((SlackInfo) object).getWebhookUrl())) {
+                if (this.getIncomingWebhookUrl().equals(((SlackInfo) object).getIncomingWebhookUrl())) {
                     return true;
                 }
             }
@@ -15,11 +15,11 @@ public class SlackInfo extends ChannelInfo {
         return false;
     }
 
-    public String getWebhookUrl() {
-        return webhookUrl;
+    public String getIncomingWebhookUrl() {
+        return incomingWebhookUrl;
     }
 
-    public void setWebhookUrl(String webhookUrl) {
-        this.webhookUrl = webhookUrl;
+    public void setIncomingWebhookUrl(String incomingWebhookUrl) {
+        this.incomingWebhookUrl = incomingWebhookUrl;
     }
 }

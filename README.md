@@ -43,7 +43,7 @@ It's channel configuration file.
   merge_duplicate_message: true
 # Slack
 - type: "slack"
-  webhook_url: ""
+  incoming_webhook_url: ""
   display_tags: true
   merge_duplicate_message: true
 # Webhook
@@ -95,10 +95,12 @@ http://example.com:59490/perri_default_channel?message=hello&tags=world,perri,ta
 
 ### Channel
 #### Telegram
-Send message to Telegram using bot_id and chat_id
+Send message to Telegram using bot id and chat id
 
 #### Slack
-Send message to Slack using webhook_url
+Send message to Slack using incoming webhook url
+
+https://api.slack.com/incoming-webhooks
 
 #### Webhook
 Send message to specific url via an HTTP POST request.

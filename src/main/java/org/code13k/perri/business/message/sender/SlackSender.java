@@ -2,14 +2,11 @@ package org.code13k.perri.business.message.sender;
 
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.HttpResponse;
-import org.apache.commons.lang3.StringUtils;
-import org.code13k.perri.model.Message;
 import org.code13k.perri.model.MessageOperation;
 import org.code13k.perri.model.config.channel.SlackInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class SlackSender extends BasicSender {
@@ -28,7 +25,7 @@ public class SlackSender extends BasicSender {
         try {
             // Get request uri
             SlackInfo slackInfo = (SlackInfo)messageOperation.getChannelInfo();
-            String requestUri = slackInfo.getWebhookUrl();
+            String requestUri = slackInfo.getIncomingWebhookUrl();
 
             // Request
             getWebClient().postAbs(requestUri).sendJsonObject(makeBody(messageOperation), request -> {

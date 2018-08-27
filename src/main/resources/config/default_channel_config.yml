@@ -5,7 +5,7 @@ perri_default_channel:
   display_tags: true
   merge_duplicate_message: true
 - type: "slack"
-  webhook_url: ""
+  incoming_webhook_url: ""
   display_tags: true
   merge_duplicate_message: true
 - type: "webhook"

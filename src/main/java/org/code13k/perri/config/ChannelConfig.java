@@ -133,18 +133,18 @@ public class ChannelConfig extends BasicConfig {
 
                     // Slack
                     else if (type.equalsIgnoreCase(ChannelType.SLACK)) {
-                        String webhookUrl = (String) valueItemObject.getOrDefault("webhook_url", "");
+                        String incomingWebhookUrl = (String) valueItemObject.getOrDefault("incoming_webhook_url", "");
 
                         // Set Slack
                         SlackInfo slackInfo = new SlackInfo();
                         slackInfo.setType(ChannelType.SLACK);
-                        slackInfo.setWebhookUrl(webhookUrl);
+                        slackInfo.setIncomingWebhookUrl(incomingWebhookUrl);
                         slackInfo.setDisplayTags(displayTags);
                         slackInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
 
                         // Check validation
-                        if (StringUtils.isEmpty(slackInfo.getWebhookUrl()) == true) {
-                            mLogger.error("Invalid slack channel (webhook_url is invalid)");
+                        if (StringUtils.isEmpty(slackInfo.getIncomingWebhookUrl()) == true) {
+                            mLogger.error("Invalid slack channel (incoming_webhook_url is invalid)");
                         } else {
                             channelList.add(slackInfo);
                         }
