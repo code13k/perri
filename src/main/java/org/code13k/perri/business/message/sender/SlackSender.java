@@ -49,6 +49,9 @@ public class SlackSender extends BasicSender {
 
                     // Not supported
                     else {
+                        mLogger.error("(Not supported) Response status code = " + responseStatusCode);
+                        mLogger.error("(Not supported) Response status message = " + responseStatusMessage);
+                        mLogger.error("(Not supported) Response body = " + responseBody);
                         consumer.accept(SendResult.FAILURE);
                     }
                 }
