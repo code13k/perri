@@ -49,9 +49,16 @@ public class MessageManager {
     }
 
     /**
-     * Number of ready message
+     * Number of ready message count
      */
-    public int numberOfReadyMessage(){
-        return mMessageOperator.queueSize();
+    public int getReadyMessageCount() {
+        return mMessageOperator.getReadyMessageCount();
+    }
+
+    /**
+     * Number of sent message count
+     */
+    public long getSentMessageCount() {
+        return mMessageOperator.getSentMessageCount();
     }
 }

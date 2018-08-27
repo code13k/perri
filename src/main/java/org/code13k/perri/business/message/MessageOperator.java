@@ -16,6 +16,7 @@ public class MessageOperator {
 
     // Data
     private ArrayList<MessageOperation> mQueue = new ArrayList<>();
+    private long mSentMessageCount = 0;
 
     /**
      * Constructor
@@ -54,12 +55,18 @@ public class MessageOperator {
     }
 
     /**
-     * Number of message operation in queue (Ready)
+     * Number of ready message
      */
-    public int queueSize() {
+    public int getReadyMessageCount(){
         return mQueue.size();
     }
 
+    /**
+     * Number of sent message
+     */
+    public long getSentMessageCount(){
+        return mSentMessageCount;
+    }
 
     /**
      * Operate message operation
@@ -73,7 +80,7 @@ public class MessageOperator {
                 public void accept(Integer result) {
                     if (result == BasicSender.SendResult.SUCCESS) {
                         mLogger.debug("The operation has succeeded. (" + type + ")");
-                        Status.getInstance().increaseSentMessageCount();
+                        mSentMessageCount++;
                     } else if (result == BasicSender.SendResult.FAILURE) {
                         mLogger.error("The operation has failed. (" + type + ")");
                     } else if (result == BasicSender.SendResult.TEMPORARY_FAILURE) {

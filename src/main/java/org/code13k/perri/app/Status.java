@@ -18,7 +18,6 @@ public class Status {
 
     // Data
     private final Date mAppStartedDate = new Date();
-    private long mSentMessageCount = 0;
 
     /**
      * Singleton
@@ -63,10 +62,10 @@ public class Status {
         StringBuffer sb = new StringBuffer();
 
         // Number of ready message
-        sb.append("Ready message = " + MessageManager.getInstance().numberOfReadyMessage());
+        sb.append("Ready message = " + MessageManager.getInstance().getReadyMessageCount());
 
         // Number of sent message
-        sb.append(", Sent message = "+ getSentMessageCount());
+        sb.append(", Sent message = "+ MessageManager.getInstance().getSentMessageCount());
         // Running time (hour)
         sb.append(", Running time = " + getAppRunningTimeHour() + "h");
 
@@ -109,19 +108,5 @@ public class Status {
         int runningTimeMin = runningTimeSec / 60;
         int runningTimeHour = runningTimeMin / 60;
         return runningTimeHour;
-    }
-
-    /**
-     * Get sent message count
-     */
-    public long getSentMessageCount(){
-        return mSentMessageCount;
-    }
-
-    /**
-     * Increase(+1) sent message count;
-     */
-    public void increaseSentMessageCount(){
-        mSentMessageCount++;
     }
 }

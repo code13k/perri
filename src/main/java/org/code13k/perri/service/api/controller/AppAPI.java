@@ -2,6 +2,7 @@ package org.code13k.perri.service.api.controller;
 
 import org.code13k.perri.app.Env;
 import org.code13k.perri.app.Status;
+import org.code13k.perri.business.message.MessageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,7 @@ public class AppAPI extends BasicAPI {
         // Current Date
         result.put("currentDate", Status.getInstance().getCurrentDateString());
 
-        // Started Date (RFC3339)
+        // Started Date
         result.put("startedDate", Status.getInstance().getAppStartedDateString());
 
         // CPU Processor Count
