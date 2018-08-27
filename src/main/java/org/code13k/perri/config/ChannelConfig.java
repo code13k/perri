@@ -110,20 +110,20 @@ public class ChannelConfig extends BasicConfig {
 
                     // Telegram
                     if (type.equalsIgnoreCase(ChannelType.TELEGRAM)) {
-                        String botId = (String) valueItemObject.getOrDefault("bot_id", "");
+                        String botApiToken = (String) valueItemObject.getOrDefault("bot_api_token", "");
                         String chatId = (String) valueItemObject.getOrDefault("chat_id", "");
 
                         // Set Telegram
                         TelegramInfo telegramInfo = new TelegramInfo();
                         telegramInfo.setType(ChannelType.TELEGRAM);
-                        telegramInfo.setBotId(botId);
+                        telegramInfo.setBotApiToken(botApiToken);
                         telegramInfo.setChatId(chatId);
                         telegramInfo.setDisplayTags(displayTags);
                         telegramInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
 
                         // Check validation
-                        if (StringUtils.isEmpty(telegramInfo.getBotId()) == true) {
-                            mLogger.error("Invalid telegram channel (bot_id is invalid)");
+                        if (StringUtils.isEmpty(telegramInfo.getBotApiToken()) == true) {
+                            mLogger.error("Invalid telegram channel (bot_api_token is invalid)");
                         } else if (StringUtils.isEmpty(telegramInfo.getChatId()) == true) {
                             mLogger.error("Invalid telegram channel (chat_id is invalid)");
                         } else {

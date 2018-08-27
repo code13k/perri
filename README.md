@@ -37,7 +37,7 @@ It's channel configuration file.
 [channel_name]:
 # Telegram
 - type: "telegram"
-  bot_id: ""
+  bot_api_token: ""
   chat_id: ""
   display_tags: true
   merge_duplicate_message: true

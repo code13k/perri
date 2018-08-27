@@ -1,15 +1,12 @@
 package org.code13k.perri.business.message.sender;
 
 import io.vertx.ext.web.client.HttpResponse;
-import org.apache.commons.lang3.StringUtils;
-import org.code13k.perri.model.Message;
 import org.code13k.perri.model.MessageOperation;
 import org.code13k.perri.model.config.channel.TelegramInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class TelegramSender extends BasicSender {
@@ -78,10 +75,10 @@ public class TelegramSender extends BasicSender {
             String urlEncodedText = URLEncoder.encode(text, "UTF-8");
 
             // Make URL
-            String bot_id = telegramInfo.getBotId();
-            String chat_id = telegramInfo.getChatId();
+            String botApiToken = telegramInfo.getBotApiToken();
+            String chatId = telegramInfo.getChatId();
             String uriFormat = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
-            String uri = String.format(uriFormat, bot_id, chat_id, urlEncodedText);
+            String uri = String.format(uriFormat, botApiToken, chatId, urlEncodedText);
 
             // End
             mLogger.debug("TelegramSender URI : " + uri);

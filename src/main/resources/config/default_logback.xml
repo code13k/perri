@@ -52,7 +52,7 @@
     -->
 
     <!-- Mode -->
-    <logger name="org.code13k.perri" level="TRACE"/>
+    <logger name="org.code13k.perri" level="INFO"/>
     <root level="WARN">
         <appender-ref ref="FILE"/>
     </root>
