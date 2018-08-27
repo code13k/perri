@@ -22,10 +22,10 @@
 
     <!-- Telegram -->
     <!--
-    <appender name="TELEGRAM-ERROR" class="com.github.paolodenti.telegram.logback.TelegramAppender">
+    <appender name="TELEGRAM" class="com.github.paolodenti.telegram.logback.TelegramAppender">
         <botToken></botToken>
         <chatId></chatId>
-        <minInterval>10</minInterval>
+        <minInterval>0</minInterval>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>[%d{MM-dd HH:mm}] [%level] [%thread] [%logger{16}:%line] %msg%n</pattern>
         </layout>

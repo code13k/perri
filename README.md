@@ -59,7 +59,7 @@ It's Logback configuration file that is famous logging library.
   1. Uncomment *Telegram* configuration.
   2. Set value of `<botToken>` and `<chatId>`.
        ```xml
-       <appender name="TELEGRAM-ERROR" class="com.github.paolodenti.telegram.logback.TelegramAppender">
+       <appender name="TELEGRAM" class="com.github.paolodenti.telegram.logback.TelegramAppender">
            <botToken></botToken>
            <chatId></chatId>
            ...
