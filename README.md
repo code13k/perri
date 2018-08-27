@@ -106,10 +106,10 @@ http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
 ```
 * port
   * Server port
-  * It's "main_http" in app_config.yml.
+  * It's *main_http* in app_config.yml.
 * channel_name
   * Channel name
-  * It's "channel_name" in channel_config.yml
+  * It's *channel_name* in channel_config.yml
 * message
   * Sending message
   * If message length are more than supported maximum length, truncate string with ellipsis.
@@ -162,7 +162,6 @@ http://example.com:59491/app/ping
 ### API
 #### GET /app/status
 * Get application status and environment.
-* Parameter : None
  
 ```json
 
@@ -190,7 +189,6 @@ http://example.com:59491/app/ping
 ```
 #### GET /app/hello
 * Hello, World
-* Parameter : None
 
 ```json
 {"data":"world"}
@@ -198,7 +196,6 @@ http://example.com:59491/app/ping
 
 #### GET /app/ping
 * Ping-Pong
-* Parameter : None
 
 ```json
 {"data":"pong"}
