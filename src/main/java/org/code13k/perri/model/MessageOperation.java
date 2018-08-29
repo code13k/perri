@@ -6,6 +6,7 @@ public class MessageOperation extends BasicModel {
     private ChannelInfo channelInfo;
     private Message message;
     private int messageCount = 1;
+    private int retryCount = 0;
 
     @Override
     public boolean equals(Object object) {
@@ -41,5 +42,13 @@ public class MessageOperation extends BasicModel {
 
     public void increaseMessageCount() {
         this.messageCount++;
+    }
+
+    public int getRetryCount(){
+        return retryCount;
+    }
+
+    public void increaseRetryCount(){
+        this.retryCount++;
     }
 }

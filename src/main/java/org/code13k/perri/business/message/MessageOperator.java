@@ -1,6 +1,6 @@
 package org.code13k.perri.business.message;
 
-import org.code13k.perri.app.Status;
+
 import org.code13k.perri.business.message.sender.BasicSender;
 import org.code13k.perri.business.message.sender.SenderFactory;
 import org.code13k.perri.model.MessageOperation;
@@ -8,13 +8,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Consumer;
 
 public class MessageOperator {
     // Logger
     private static final Logger mLogger = LoggerFactory.getLogger(MessageOperator.class);
 
+    // Const
+    private static final int MAX_RETRY_COUNT = 5;
+
     // Data
+    private Timer mRetryTimer = new Timer("perri-retry-timer");
     private ArrayList<MessageOperation> mQueue = new ArrayList<>();
     private long mSentMessageCount = 0;
 
@@ -57,14 +63,14 @@ public class MessageOperator {
     /**
      * Number of ready message
      */
-    public int getReadyMessageCount(){
+    public int getReadyMessageCount() {
         return mQueue.size();
     }
 
     /**
      * Number of sent message
      */
-    public long getSentMessageCount(){
+    public long getSentMessageCount() {
         return mSentMessageCount;
     }
 
@@ -85,7 +91,21 @@ public class MessageOperator {
                         mLogger.error("The operation has failed. (" + type + ")");
                     } else if (result == BasicSender.SendResult.TEMPORARY_FAILURE) {
                         mLogger.error("The operation has failed. But it's temporary. Try again. (" + type + ")");
-                        // TODO Impl
+
+                        // Retry operation
+                        if (messageOperation.getRetryCount() < MAX_RETRY_COUNT) {
+                            messageOperation.increaseRetryCount();
+                            mLogger.info("messageOperation = " + messageOperation);
+                            mRetryTimer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    add(messageOperation);
+                                }
+                            }, 3000 * messageOperation.getRetryCount());
+                        } else {
+                            // FAILURE
+                            mLogger.error("Failed to retry. The operation has failed. (" + type + ")");
+                        }
                     }
                 }
             });
