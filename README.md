@@ -102,14 +102,14 @@ The other is a restful API server that provide application information and addit
 ## Main HTTP Server
 ### Usage
 ```html
-http://example.com:{port}/{channel_name}?message={message}&tags={tag1,tag2,tag3}
+http://example.com:{port}/{channel}?message={message}&tags={tag1,tag2,tag3}
 ```
 * port
   * Server port
   * It's *main_http* in app_config.yml.
-* channel_name
+* channel
   * Channel name
-  * It's *channel_name* in channel_config.yml
+  * It's *channel* in channel_config.yml
 * message
   * Sending message
   * If message length are more than supported maximum length, truncate string with ellipsis.
@@ -162,10 +162,10 @@ http://example.com:59491/app/ping
 ### API
 #### GET /app/status
 * Get application status and environment.
- 
+##### Response
 ```json
-
-{"data":{
+{
+  "data":{
     "applicationVersion":"0.1.0-alpha.3",
     "cpuUsage":2.56,
     "threadInfo":{...},
@@ -189,14 +189,14 @@ http://example.com:59491/app/ping
 ```
 #### GET /app/hello
 * Hello, World
-
+##### Response
 ```json
 {"data":"world"}
 ```
 
 #### GET /app/ping
 * Ping-Pong
-
+##### Response
 ```json
 {"data":"pong"}
 ```

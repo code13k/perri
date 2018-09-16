@@ -83,7 +83,7 @@ public class ApiHttpServer extends AbstractVerticle {
      * Set app router
      */
     private void setAppRouter(Router router) {
-        // GET /info
+        // GET /app/status
         router.route().method(HttpMethod.GET).path("/app/status").handler(routingContext -> {
             routingContext.request().endHandler(new Handler<Void>() {
                 @Override
@@ -92,7 +92,7 @@ public class ApiHttpServer extends AbstractVerticle {
                 }
             });
         });
-        // GET /hello
+        // GET /app/hello
         router.route().method(HttpMethod.GET).path("/app/hello").handler(routingContext -> {
             routingContext.request().endHandler(new Handler<Void>() {
                 @Override
@@ -101,7 +101,7 @@ public class ApiHttpServer extends AbstractVerticle {
                 }
             });
         });
-        // GET /ping
+        // GET /app/ping
         router.route().method(HttpMethod.GET).path("/app/ping").handler(routingContext -> {
             routingContext.request().endHandler(new Handler<Void>() {
                 @Override
