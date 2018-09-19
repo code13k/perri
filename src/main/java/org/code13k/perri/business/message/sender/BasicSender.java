@@ -41,7 +41,7 @@ public abstract class BasicSender {
 
         // Set user-agent
         StringBuffer sb = new StringBuffer();
-        sb.append("Perri/");
+        sb.append("Code13k-Perri/");
         sb.append(Env.getInstance().getVersionString());
         sb.append(" (");
         sb.append("message sender");
