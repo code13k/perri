@@ -8,6 +8,14 @@ perri_default_channel:
   incoming_webhook_url: ""
   display_tags: true
   merge_duplicate_message: true
+- type: "discord"
+  incoming_webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
+- type: "hangout"
+  incoming_webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
 - type: "webhook"
   webhook_url: ""
   display_tags: true

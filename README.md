@@ -9,7 +9,9 @@ So we start to develop centralized server to easily send message to Telegram and
 
 # Supported messenger
 * Telegram
-* Slack1
+* Slack
+* Discord
+* Hangout
 * Webhook
 
 
@@ -43,6 +45,16 @@ It's channel configuration file.
   merge_duplicate_message: true
 # Slack
 - type: "slack"
+  incoming_webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
+# Discord
+- type: "discord"
+  incoming_webhook_url: ""
+  display_tags: true
+  merge_duplicate_message: true
+# Hangout
+- type: "hangout"
   incoming_webhook_url: ""
   display_tags: true
   merge_duplicate_message: true
@@ -133,6 +145,16 @@ Send message to Telegram using bot id and chat id
 Send message to Slack using incoming webhook url
 
 https://api.slack.com/incoming-webhooks
+
+#### Discord
+Discord message to Discord using incoming webhook url
+
+https://discordapp.com/developers/docs/resources/webhook
+
+#### Hangout
+Hangout message to Hangout using incoming webhook url
+
+https://developers.google.com/hangouts/chat/reference/message-formats/
 
 #### Webhook
 Send message to specific url via an HTTP POST request.

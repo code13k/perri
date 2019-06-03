@@ -6,6 +6,8 @@ import org.code13k.perri.model.MessageOperation;
 public class SenderFactory {
     private static TelegramSender mTelegramSender = new TelegramSender();
     private static SlackSender mSlackSender = new SlackSender();
+    private static DiscordSender mDiscordSender = new DiscordSender();
+    private static HangoutSender mHangoutSender = new HangoutSender();
     private static WebhookSender mWebhookSender = new WebhookSender();
 
     public static BasicSender getSender(MessageOperation messageOperation) {
@@ -16,6 +18,10 @@ public class SenderFactory {
             result = mTelegramSender;
         } else if (channelType.equals(ChannelConfig.ChannelType.SLACK)) {
             result = mSlackSender;
+        } else if (channelType.equals(ChannelConfig.ChannelType.DISCORD)) {
+            result = mDiscordSender;
+        } else if (channelType.equals(ChannelConfig.ChannelType.HANGOUT)) {
+            result = mHangoutSender;
         } else if (channelType.equals(ChannelConfig.ChannelType.WEBHOOK)) {
             result = mWebhookSender;
         }

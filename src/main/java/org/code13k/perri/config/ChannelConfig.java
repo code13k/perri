@@ -1,10 +1,7 @@
 package org.code13k.perri.config;
 
 import org.apache.commons.lang3.StringUtils;
-import org.code13k.perri.model.config.channel.ChannelInfo;
-import org.code13k.perri.model.config.channel.SlackInfo;
-import org.code13k.perri.model.config.channel.TelegramInfo;
-import org.code13k.perri.model.config.channel.WebhookInfo;
+import org.code13k.perri.model.config.channel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -26,6 +23,8 @@ public class ChannelConfig extends BasicConfig {
     public class ChannelType {
         public static final String TELEGRAM = "telegram";
         public static final String SLACK = "slack";
+        public static final String DISCORD = "discord";
+        public static final String HANGOUT = "hangout";
         public static final String WEBHOOK = "webhook";
     }
 
@@ -147,6 +146,44 @@ public class ChannelConfig extends BasicConfig {
                             mLogger.error("Invalid slack channel (incoming_webhook_url is invalid)");
                         } else {
                             channelList.add(slackInfo);
+                        }
+                    }
+
+                    // Discord
+                    else if (type.equalsIgnoreCase(ChannelType.DISCORD)) {
+                        String incomingWebhookUrl = (String) valueItemObject.getOrDefault("incoming_webhook_url", "");
+
+                        // Set Discord
+                        DiscordInfo discordInfo = new DiscordInfo();
+                        discordInfo.setType(ChannelType.DISCORD);
+                        discordInfo.setIncomingWebhookUrl(incomingWebhookUrl);
+                        discordInfo.setDisplayTags(displayTags);
+                        discordInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
+
+                        // Check validation
+                        if (StringUtils.isEmpty(discordInfo.getIncomingWebhookUrl()) == true) {
+                            mLogger.error("Invalid discord channel (incoming_webhook_url is invalid)");
+                        } else {
+                            channelList.add(discordInfo);
+                        }
+                    }
+
+                    // Hangout
+                    else if (type.equalsIgnoreCase(ChannelType.HANGOUT)) {
+                        String incomingWebhookUrl = (String) valueItemObject.getOrDefault("incoming_webhook_url", "");
+
+                        // Set Hangout
+                        HangoutInfo hangoutInfo = new HangoutInfo();
+                        hangoutInfo.setType(ChannelType.HANGOUT);
+                        hangoutInfo.setIncomingWebhookUrl(incomingWebhookUrl);
+                        hangoutInfo.setDisplayTags(displayTags);
+                        hangoutInfo.setMergeDuplicateMessage(mergeDuplicateMessage);
+
+                        // Check validation
+                        if (StringUtils.isEmpty(hangoutInfo.getIncomingWebhookUrl()) == true) {
+                            mLogger.error("Invalid hangout channel (incoming_webhook_url is invalid)");
+                        } else {
+                            channelList.add(hangoutInfo);
                         }
                     }
 
