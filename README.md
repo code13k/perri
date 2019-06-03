@@ -9,7 +9,7 @@ So we start to develop centralized server to easily send message to Telegram and
 
 # Supported messenger
 * Telegram
-* Slack
+* Slack1
 * Webhook
 
 
